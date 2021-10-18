@@ -1,28 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Navbar,Container,FormControl, InputGroup} from 'react-bootstrap';
 import './App.css';
+import { BrowserRouter as Router, Route  } from 'react-router-dom';
+
 import Company from './components/Company';
+import Search from './components/Search';
 
 function App() {
   return (
-    <div className="App">
-     <Navbar bg="dark" variant="dark">
-     <Container>
-      <Navbar.Brand > 
-       Job-Search-Engine
-      </Navbar.Brand>
-    </Container>
-  </Navbar>
-  <InputGroup className="mb-3">
-   
-    <FormControl
-      placeholder="search-job-here"
-      aria-label="search-job-here"
-      aria-describedby="basic-addon1"
-    />
-  </InputGroup>
-  <Company />
-    </div>
+  <Router>
+    <Route path="/" exact component={Search}/>
+    <Route path="/:companyName" exact component={Company}/>
+  </Router>
+    
   );
 }
 export default App;

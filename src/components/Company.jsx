@@ -1,59 +1,36 @@
+import React from 'react'
+import { Container, Row, Col } from 'react-bootstrap'
+import Job from './Job'
+import uniqid from 'uniqid'
 
-import { useState, useEffect } from "react";
-import { Card } from "react-bootstrap";
+export default class CompanySearchResults extends React.Component {
 
-const Company = () => {
-   
-   const [data, setJobs] = useState([])
+    state = {
+        jobs: []
+    }
 
-   const fetchJobsData = async () => {
-    
-    try {
-        let response = await fetch("https://strive-jobs-api.herokuapp.com/jobs?limit=10&skip=10")
-        console.log(response)
-        if (response.ok) {
-            let data = await response.json()
-            console.log(data)
-            setJobs(data.data)
-           
-        } else {
-            console.log('something went wrong')
-        }
-    } catch (error) {
-        console.log(error)
+    componentDidMount() {
+        this.getJobs()
+    }
+
+    baseEndpoint = 'https://strive-jobs-api.herokuapp.com/jobs?company='
+
+    getJobs = async () => {
+        const response = await fetch(this.baseEndpoint + this.props.match.params.companyName)
+        const { data } = await response.json()
+
+        this.setState({ jobs: data })
+    }
+
+    render() {
+        return <Container>
+            <Row>
+                <Col>
+                    {
+                        this.state.jobs.map(jobData => <Job key={uniqid()} data={jobData} />)
+                    }
+                </Col>
+            </Row>
+        </Container>
     }
 }
-useEffect(() => {
-    fetchJobsData()
-}, [])
-
-   
-    return(
-        <>
-            {
-                data.map( job => 
-                  
-                    <div>
-                    <Card>
-
-                        <Card.Body>
-                            <Card.Title>{job.title}</Card.Title>
-                            <Card.Text>
-                                {job.company_name}
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </div>
-                )
-
-                   
-                   
-                
-            }
-            </> 
-
-    )
-}
-
-
-export default Company
